@@ -4,6 +4,7 @@ import {logoURL, subURL} from "../../utils/utils";
 import {useStyles} from "./HeaderStyles";
 import SearchBar from "./SearchBar/SearchBar";
 import HeaderButtons from "./HeaderButtons/HeaderButtons";
+import {Link} from 'react-router-dom'
 
 const ToolBar = withStyles({
     root: {
@@ -17,13 +18,13 @@ export const Header = () => {
         <>
             <AppBar className={classes.header}>
                 <ToolBar>
-                    <Box className={classes.component}>
+                    <Link to={'/'} className={classes.component}>
                         <img  alt={"flipkart-logo"} src={logoURL} className={classes.logo}/>
                         <Box className={classes.container}>
                             <Typography className={classes.subHeading}>Explore <Box style={{color: '#FFE500'}} component={"span"}>Plus</Box></Typography>
                             <img src={subURL} alt={"plus-icon"} className={classes.subURL}/>
                         </Box>
-                    </Box>
+                    </Link>
                     <SearchBar/>
                     <HeaderButtons/>
                 </ToolBar>

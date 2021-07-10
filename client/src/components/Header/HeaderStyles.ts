@@ -18,7 +18,9 @@ export const useStyles = makeStyles({
     },
     component: {
         marginLeft: '12%',
-        lineHeight: 0
+        lineHeight: 0,
+        textDecoration: 'none',
+        color: 'white'
     },
     subHeading: {
         fontSize: 10,

@@ -15,10 +15,13 @@ export const useStyles = makeStyles({
         display: 'flex',
         '& > *': {
             marginRight: 50,
-            alignItems: 'center'
+            alignItems: 'center',
+            textDecoration: 'none',
+            color: 'white'
         }
     },
     container: {
-        display: 'flex'
+        display: 'flex',
+
     }
 })
