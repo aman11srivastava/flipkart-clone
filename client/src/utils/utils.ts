@@ -48,6 +48,12 @@ export type ProductType = {
     tagline: string
 }
 
+export type AuthType = {
+    view: string
+    heading: string
+    subheading: string
+}
+
 export const products: ProductType[] = [
     {
         id: 'product1',
