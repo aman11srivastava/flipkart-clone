@@ -1,7 +1,8 @@
-import React, {useState} from "react";
+import React, {ChangeEvent, useState} from "react";
 import {useStyles} from "./LoginStyles";
 import {Box, Button, Dialog, DialogContent, TextField, Typography} from "@material-ui/core";
 import {AuthType} from "../../utils/utils";
+import {authenticateSignUp} from "../../service/api";
 
 interface LoginProps {
     open: boolean
@@ -21,9 +22,28 @@ const initialValue = {
     }
 }
 
+export type SignUpInfoType = {
+    firstName: string
+    lastName: string
+    username: string
+    password: string
+    email: string
+    phone: string
+}
+
+const signUpInitialValues = {
+    firstName: '',
+    lastName: '',
+    username: '',
+    password: '',
+    phone: '',
+    email: ''
+}
+
 export const Login = ({open, setOpen}: LoginProps) => {
     const classes = useStyles();
     const [account, setAccount] = useState<AuthType>(initialValue.login)
+    const [signUp, setSignUp] = useState<SignUpInfoType>(signUpInitialValues)
 
     const toggleAccount = () => {
         setAccount(initialValue.signup)
@@ -32,6 +52,19 @@ export const Login = ({open, setOpen}: LoginProps) => {
     const handleClose = () => {
         setAccount(initialValue.login)
         setOpen(false)
+    };
+
+    const signUpUser = async () => {
+        let response = await authenticateSignUp(signUp)
+        if (!response) return;
+        handleClose()
+    };
+
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setSignUp({
+            ...signUp,
+            [e.target.name]: e.target.value
+        })
     };
 
     return(
@@ -56,13 +89,31 @@ export const Login = ({open, setOpen}: LoginProps) => {
                                 </Box>
                                 :
                                 <Box className={classes.login}>
-                                    <TextField name={"firstname"} label={"Enter Firstname"}/>
-                                    <TextField name={"lastname"} label={"Enter Lastname"}/>
-                                    <TextField name={"username"} label={"Enter username"}/>
-                                    <TextField name={"email"} label={"Enter Email"}/>
-                                    <TextField name={"phone"} label={"Enter Mobile number"}/>
-                                    <TextField name={"password"} label={"Enter Password"} type={"password"}/>
-                                    <Button className={classes.loginBtn} variant={"contained"}>Sign Up</Button>
+                                    <TextField name={"firstName"} label={"Enter Firstname"}
+                                               onChange={(e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(e)}
+                                    />
+                                    <TextField name={"lastName"} label={"Enter Lastname"}
+                                               onChange={(e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(e)}
+                                    />
+                                    <TextField name={"username"} label={"Enter username"}
+                                               onChange={(e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(e)}
+                                    />
+                                    <TextField name={"email"} label={"Enter Email"}
+                                        onChange={(e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(e)}
+                                    />
+                                    <TextField name={"phone"} label={"Enter Mobile number"}
+                                               onChange={(e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(e)}
+                                    />
+                                    <TextField name={"password"} label={"Enter Password"} type={"password"}
+                                               onChange={(e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(e)}
+                                    />
+                                    <Button
+                                        onClick = {signUpUser}
+                                        className={classes.loginBtn}
+                                        variant={"contained"}
+                                    >
+                                        Sign Up
+                                    </Button>
                                 </Box>
                         }
                     </Box>

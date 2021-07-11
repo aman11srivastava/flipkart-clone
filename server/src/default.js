@@ -1,5 +1,5 @@
-import {products} from "./constants/product";
-import Product from './models/productSchema'
+import {products} from "./constants/product.js";
+import Product from './models/productSchema.js'
 
 export const DefaultData = async () => {
     try {
