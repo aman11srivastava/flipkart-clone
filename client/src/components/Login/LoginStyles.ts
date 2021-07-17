@@ -53,5 +53,11 @@ export const useStyles = makeStyles({
         color: '#2874F0',
         fontWeight: 600,
         cursor: 'pointer'
+    },
+    error: {
+        fontSize: 13,
+        color: '#ff6161',
+        fontWeight: 600,
+        lineHeight: 0
     }
 })

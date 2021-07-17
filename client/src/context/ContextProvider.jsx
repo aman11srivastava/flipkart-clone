@@ -1,10 +1,11 @@
-import React, {createContext, ReactElement, useState} from "react";
+import React, {createContext, useState} from "react";
 
-const LoginContext = createContext(null)
+export const LoginContext = createContext(null);
 
 export const ContextProvider = ({children}) => {
     const [account, setAccount] = useState('');
 
+    // @ts-ignore
     return(
         <LoginContext.Provider
             value={{account, setAccount}}
@@ -13,3 +14,5 @@ export const ContextProvider = ({children}) => {
         </LoginContext.Provider>
     )
 }
+
+export default ContextProvider

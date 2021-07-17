@@ -187,3 +187,44 @@ export const ImageURL: string[] = [
 ];
 
 export const coronaURL: string = 'https://rukminim1.flixcart.com/flap/3006/433/image/4789bc3aefd54494.jpg?q=50';
+
+export type SignUpInfoType = {
+    firstName: string
+    lastName: string
+    username: string
+    password: string
+    email: string
+    phone: string
+}
+
+export const initialValue = {
+    login: {
+        view: 'login',
+        heading: 'Login',
+        subheading: 'Get access to your Orders, Wishlist and Recommendations'
+    },
+    signup: {
+        view: 'signup',
+        heading: 'Looks like you\'re new here!',
+        subheading: 'Sign up with your mobile number to get started'
+    }
+}
+
+export const signUpInitialValues = {
+    firstName: '',
+    lastName: '',
+    username: '',
+    password: '',
+    phone: '',
+    email: ''
+}
+
+export type LoginInfoType = {
+    username: string
+    password: string
+}
+
+export const loginInitialValues = {
+    username: '',
+    password: '',
+}

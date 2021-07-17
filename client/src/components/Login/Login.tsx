@@ -1,63 +1,44 @@
 import React, {ChangeEvent, useState} from "react";
 import {useStyles} from "./LoginStyles";
 import {Box, Button, Dialog, DialogContent, TextField, Typography} from "@material-ui/core";
-import {AuthType} from "../../utils/utils";
-import {authenticateSignUp} from "../../service/api";
+import {
+    AuthType,
+    initialValue,
+    LoginInfoType,
+    loginInitialValues,
+    SignUpInfoType,
+    signUpInitialValues
+} from "../../utils/utils";
+import {authenticateLogin, authenticateSignUp} from "../../service/api";
 
 interface LoginProps {
     open: boolean
     setOpen: (value: boolean) => void;
+    setAccount: (val: string) => void
 }
 
-const initialValue = {
-    login: {
-        view: 'login',
-        heading: 'Login',
-        subheading: 'Get access to your Orders, Wishlist and Recommendations'
-    },
-    signup: {
-        view: 'signup',
-        heading: 'Looks like you\'re new here!',
-        subheading: 'Sign up with your mobile number to get started'
-    }
-}
 
-export type SignUpInfoType = {
-    firstName: string
-    lastName: string
-    username: string
-    password: string
-    email: string
-    phone: string
-}
-
-const signUpInitialValues = {
-    firstName: '',
-    lastName: '',
-    username: '',
-    password: '',
-    phone: '',
-    email: ''
-}
-
-export const Login = ({open, setOpen}: LoginProps) => {
+export const Login = ({open, setOpen, setAccount}: LoginProps) => {
     const classes = useStyles();
-    const [account, setAccount] = useState<AuthType>(initialValue.login)
+    const [account, toggleAccount] = useState<AuthType>(initialValue.login)
     const [signUp, setSignUp] = useState<SignUpInfoType>(signUpInitialValues)
+    const [login, setLogin] = useState<LoginInfoType>(loginInitialValues)
+    const [error, setError] = useState<boolean>(false);
 
-    const toggleAccount = () => {
-        setAccount(initialValue.signup)
+    const toggleUserAccount = () => {
+        toggleAccount(initialValue.signup)
     };
 
     const handleClose = () => {
-        setAccount(initialValue.login)
+        toggleAccount(initialValue.login)
         setOpen(false)
     };
 
     const signUpUser = async () => {
         let response = await authenticateSignUp(signUp)
         if (!response) return;
-        handleClose()
+        handleClose();
+        setAccount(signUp.username)
     };
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -66,6 +47,23 @@ export const Login = ({open, setOpen}: LoginProps) => {
             [e.target.name]: e.target.value
         })
     };
+
+    const handleLoginValuesChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setLogin({
+            ...login,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const loginUser = async () => {
+        let response = await authenticateLogin(login);
+        if (!response) {
+            setError(true)
+            return;
+        }
+        handleClose();
+        setAccount(login.username)
+    }
 
     return(
         <>
@@ -79,13 +77,26 @@ export const Login = ({open, setOpen}: LoginProps) => {
                         {
                             account === initialValue.login ?
                                 <Box className={classes.login}>
-                                    <TextField name={"username"} label={"Enter Email/Mobile number"}/>
-                                    <TextField name={"password"} label={"Enter Password"} type={"password"}/>
+                                    <TextField name={"username"} label={"Enter Email/Mobile number"}
+                                               onChange={(e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleLoginValuesChange(e)}
+                                    />
+                                    <TextField name={"password"} label={"Enter Password"} type={"password"}
+                                               onChange={(e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleLoginValuesChange(e)}
+                                    />
+                                    {
+                                        error && <Typography className={classes.error}>Login Authentication Failed!</Typography>
+                                    }
                                     <Typography className={classes.text}>By continuing, you agree to Flipkart's Terms of Use and Privacy Policy.</Typography>
-                                    <Button className={classes.loginBtn} variant={"contained"}>Login</Button>
+                                    <Button
+                                        className={classes.loginBtn}
+                                        variant={"contained"}
+                                        onClick = {loginUser}
+                                    >
+                                        Login
+                                    </Button>
                                     <Typography className={classes.text} style={{textAlign: 'center'}}>OR</Typography>
                                     <Button className={classes.requestBtn} variant={"contained"}>Request OTP</Button>
-                                    <Typography onClick = {toggleAccount} className={classes.createText}>New to Flipkart? Create an account</Typography>
+                                    <Typography onClick = {toggleUserAccount} className={classes.createText}>New to Flipkart? Create an account</Typography>
                                 </Box>
                                 :
                                 <Box className={classes.login}>
